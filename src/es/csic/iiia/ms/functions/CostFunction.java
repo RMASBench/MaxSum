@@ -111,11 +111,20 @@ public interface CostFunction {
      */
     CostFunction reduce(VariableAssignment mapping);
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     boolean equals(Object obj);
+
+    /**
+     * Indicates whether some other factor is "equal to" this one, concerning a
+     * delta.
+     *
+     * @param other the reference object with which to compare.
+     * @param delta the maximum delta between factor values for which both
+     * numbers are still considered equal.
+     * @return  <code>true</code> if this object is the same as the obj
+     *          argument; <code>false</code> otherwise.
+     */
+    public boolean equals(CostFunction other, double delta);
 
     /**
      * Sets the initial cost/utility of all the factor configurations to the given initial value.

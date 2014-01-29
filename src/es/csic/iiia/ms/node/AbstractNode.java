@@ -64,6 +64,11 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
+    public Identity getId() {
+        return id;
+    }
+
+    @Override
     public CostFunction getPotential() {
         return potential;
     }

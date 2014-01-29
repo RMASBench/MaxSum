@@ -40,13 +40,20 @@ package es.csic.iiia.ms.op;
  * Available normalization modes.
  */
 public enum Normalize {
+
     /**
      * Do not normalize.
      */
-    NONE, /**
-     * Normalize so that all values add to 0.
-     */ SUM0, /**
-     * Normalize so that all values add to 1.
-     */ SUM1
+    NONE,
 
+    /**
+     * Normalize so that all values add to 0.
+     */
+    SUM0,
+
+    /**
+     * Normalize so that all values add to 1.
+     */
+    SUM1
+    
 }

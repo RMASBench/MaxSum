@@ -42,8 +42,8 @@ import es.csic.iiia.ms.functions.CostFunction;
  *
  * @author Marc Pujol <mpujol@iiia.csic.es>
  */
-public interface Communicator {
+public interface Communicator<T extends Identity> {
 
-    public void send(CostFunction message, Identity from, Identity to);
+    public void send(CostFunction message, T from, T to);
 
 }

@@ -46,6 +46,8 @@ import es.csic.iiia.ms.functions.CostFunction;
  */
 public interface Node {
 
+    Identity getId();
+
     void addNeighbor(Identity neighbor, Variable variable);
 
     CostFunction getBelief();

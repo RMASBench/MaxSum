@@ -40,6 +40,7 @@ package es.csic.iiia.ms.op;
  * Available combination modes.
  */
 public enum Combine {
+    
     /**
      * Perform the combine operator using product.
      */
@@ -63,9 +64,12 @@ public enum Combine {
         public double invert(double x) {
             throw new UnsupportedOperationException("Product has no inverse");
         }
-    }, /**
+    },
+
+    /**
      * Perform the combine operator using addition.
-     */ SUM {
+     */
+    SUM {
         @Override
         public double getNeutralValue() {
             return 0;

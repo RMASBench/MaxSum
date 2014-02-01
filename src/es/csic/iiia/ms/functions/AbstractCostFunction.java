@@ -583,20 +583,24 @@ public abstract class AbstractCostFunction<T> implements CostFunction {
         if (mode == Normalize.NONE) {
             return this;
         }
+        Summarize sz = factory.getSummarizeOperation();
 
         CostFunction result = factory.buildCostFunction(this);
 
         // Calculate aggregation
         TLongIterator it = iterator();
-        double sum = 0;
+        double sum = 0, max = sz.getNoGood();
         while(it.hasNext()) {
-            sum += getValue(it.next());
+            final double value = getValue(it.next());
+            sum += value;
+            max = sz.eval(max, value);
         }
 
         //@TODO: This is noooot so clear.
         final double dlen = (double)size;
         final double avg = sum / size;
         if (Double.isNaN(avg)) {
+            System.err.println("dlen: " + dlen + ", sum: " + sum + ", size: " + size);
             throw new RuntimeException("Normalization generated a NaN value. Halting.");
         }
         it = iterator();
@@ -620,6 +624,12 @@ public abstract class AbstractCostFunction<T> implements CostFunction {
                     result.setValue(i, v);
                 }
                 break;
+            case DIFF:
+                while(it.hasNext()) {
+                    final long i = it.next();
+                    final double value = getValue(i);
+                    result.setValue(i, value - max);
+                };
         }
 
         return result;

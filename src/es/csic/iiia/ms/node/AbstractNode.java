@@ -51,16 +51,17 @@ public abstract class AbstractNode implements Node {
     private final Communicator comunicator;
     private final Identity id;
 
-    private final Map<Identity, CostFunction> messages = new TreeMap<>();
-    private final TreeMap<Identity, Variable> neighbors = new TreeMap<>();
+    protected CostFunction belief;
+    protected final Map<Identity, CostFunction> messages = new TreeMap<>();
+    protected final TreeMap<Identity, Variable> neighbors = new TreeMap<>();
 
     private CostFunction potential;
-    private CostFunction belief;
 
     public AbstractNode(Identity id, Communicator communicator, CostFunction potential) {
         this.id = id;
         this.potential = potential;
         this.comunicator = communicator;
+        this.belief = potential;
     }
 
     @Override
@@ -69,13 +70,13 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
-    public CostFunction getPotential() {
-        return potential;
+    public CostFunction getBelief() {
+        return belief;
     }
 
     @Override
-    public CostFunction getBelief() {
-        return belief;
+    public CostFunction getPotential() {
+        return potential;
     }
 
     @Override
@@ -87,21 +88,12 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
-    public void run() {
-        belief = getPotential().combine(messages.values()).normalize();
-        for (Identity neighbor : neighbors.keySet()) {
-            CostFunction msg = belief.combine(messages.get(neighbor).negate());
-            send(msg, neighbor);
-        }
-    }
-
-    @Override
     public void receive(CostFunction message, Identity neighbor) {
         messages.put(neighbor, message);
     }
 
-    private void send(CostFunction message, Identity neighbor) {
-        this.comunicator.send(message, id, neighbor);
+    protected void send(CostFunction message, Identity neighbor) {
+        comunicator.send(message, id, neighbor);
     }
 
 }

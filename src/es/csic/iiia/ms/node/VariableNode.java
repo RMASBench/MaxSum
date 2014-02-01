@@ -38,6 +38,7 @@ package es.csic.iiia.ms.node;
 
 import es.csic.iiia.ms.Communicator;
 import es.csic.iiia.ms.Identity;
+import es.csic.iiia.ms.Variable;
 import es.csic.iiia.ms.VariableAssignment;
 import es.csic.iiia.ms.functions.CostFunction;
 
@@ -51,10 +52,24 @@ public class VariableNode extends AbstractNode {
         super(id, communicator, potential);
     }
 
+    @Override
+    public void run() {
+        belief = getPotential().combine(messages.values());
+        for (Identity neighbor : neighbors.keySet()) {
+            CostFunction negatedMsg = messages.get(neighbor).negate();
+            CostFunction msg = belief.combine(negatedMsg);
+            send(msg, neighbor);
+        }
+    }
+
     public int select() {
-        final CostFunction belief = getBelief();
         VariableAssignment configuration = belief.getOptimalConfiguration(null);
         return configuration.get(configuration.keySet().iterator().next());
+    }
+
+    @Override
+    public String toString() {
+        return "VNode[" + getId() + "]";
     }
 
 }

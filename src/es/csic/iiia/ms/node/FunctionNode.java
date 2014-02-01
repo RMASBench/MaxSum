@@ -38,6 +38,7 @@ package es.csic.iiia.ms.node;
 
 import es.csic.iiia.ms.Communicator;
 import es.csic.iiia.ms.Identity;
+import es.csic.iiia.ms.Variable;
 import es.csic.iiia.ms.functions.CostFunction;
 
 /**
@@ -50,4 +51,19 @@ public class FunctionNode extends AbstractNode {
         super(id, communicator, potential);
     }
 
+    @Override
+    public void run() {
+        belief = getPotential().combine(messages.values());
+        for (Identity neighbor : neighbors.keySet()) {
+            CostFunction inMsg = messages.get(neighbor).negate();
+            Variable[] variables = inMsg.getVariableSet().toArray(new Variable[1]);
+            CostFunction msg = belief.summarize(variables).combine(inMsg).normalize();
+            send(msg, neighbor);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "FNode[" + getId() + "]";
+    }
 }

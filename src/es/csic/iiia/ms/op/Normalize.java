@@ -54,6 +54,11 @@ public enum Normalize {
     /**
      * Normalize so that all values add to 1.
      */
-    SUM1
-    
+    SUM1,
+
+    /**
+     * Normalize by subtracting the first element to all others.
+     */
+    DIFF,
+
 }
